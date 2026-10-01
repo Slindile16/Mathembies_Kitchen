@@ -1,49 +1,49 @@
 # Mathembies Kitchen
 
-A website for **Mathembies Kitchen**, a local food business.
+A finished, mobile-friendly menu and ordering website for Mathembies Kitchen.
 
-The website allows customers to view the available food and drinks, select what they want to order, see the total price, and send their order directly to Mathembies Kitchen through WhatsApp.
+## Website
 
-## Features
+Visit the live website: [slindile16.github.io/Mathembies_Kitchen](https://slindile16.github.io/Mathembies_Kitchen/)
 
-* View the menu
-* Select items and quantities
-* Automatically calculate the order total
-* Send orders through WhatsApp
-* View business contact information
-* View pickup location
-* Mobile-friendly design
+The site is published with GitHub Pages from the `main` branch.
 
-## Ordering
+## What customers can do
 
-Orders are placed through WhatsApp.
+- Browse food, cold drinks, sweets, and snacks, with photos of menu items.
+- View item details and zoom in on photos.
+- Choose menu options and quantities and see the order total.
+- Send an order to the business through WhatsApp.
+- Find the business location, opening hours, and contact information.
+- Dine in or order for pickup.
 
-**WhatsApp / Call:** +27 83 471 6626
+## Business information
 
-If there is no response within 5 minutes, customers can contact the business through a WhatsApp call or direct phone call.
+- **Address:** 808 Ntsoanna Crescent, Old Etwatwa West, Benoni, 1519
+- **Hours:** Monday–Saturday, 10:00am–8:00pm; Sunday, 10:00am–6:00pm
+- **WhatsApp / phone:** +27 83 471 6626
 
-## Dine-in and pickup
+Orders containing a plate need at least one hour of preparation time. Collection times must fall within business hours.
 
-Customers can dine in or order for pickup. WhatsApp orders are prepared for collection.
+## Run locally on Windows
 
-**Location:** 808 Ntsoanna Crescent, Old Etwatwa West, Benoni, 1519
+Open PowerShell in this project folder and run:
 
-**Hours:** Monday–Saturday, 10:00am–8:00pm; Sunday, 10:00am–6:00pm
+```powershell
+start .\index.html
+```
 
-Orders containing a Plate need at least one hour of preparation time. The selected collection time is treated as the next occurrence of that time, including tomorrow when the time has already passed today. Collection times must fall within business hours.
+This opens the website in your default browser. The site is built with plain HTML, CSS, and JavaScript, so no installation is needed.
 
-## Technologies
+## Project files
 
-* HTML
-* CSS
-* JavaScript
-
-## Business
-
-**Mathembies Kitchen**
-
+- `index.html` — website content and menu
+- `style.css` — layout and styling
+- `script.js` — menu interactions and WhatsApp ordering
+- `images/` — menu photos
+- `Mathembies-Kitchen-QR.png` — QR code linking to the live website
 
 ## Developer
 
-**Slindile Mthimunye**
-
+**Slindile Mthimunye**  
+Website enquiries: **+27 67 243 3943**
