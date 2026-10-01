@@ -491,23 +491,6 @@ function getClosingHour(date) {
 }
 
 
-function updateCollectionTimeLimit() {
-
-    if (collectionTime.value === "") {
-        collectionTime.max = "20:00";
-        return;
-    }
-
-    const collectionDate = getCollectionDate();
-    collectionTime.max = getClosingHour(collectionDate) + ":00";
-
-}
-
-
-collectionTime.addEventListener("input", updateCollectionTimeLimit);
-updateCollectionTimeLimit();
-
-
 // =========================
 // WhatsApp Order
 // =========================
