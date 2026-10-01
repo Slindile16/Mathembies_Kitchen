@@ -12,10 +12,66 @@ const orderTotal = document.getElementById("order-total");
 
 const collectionTime = document.getElementById("collection-time");
 const whatsappButton = document.getElementById("whatsapp-button");
+const imageLightbox = document.getElementById("image-lightbox");
+const imageLightboxPhoto = document.getElementById("image-lightbox-photo");
+const imageLightboxCaption = document.getElementById("image-lightbox-caption");
+const imageLightboxClose = document.getElementById("image-lightbox-close");
+const imageZoomToggle = document.getElementById("image-zoom-toggle");
 
 const whatsappNumber = "27834716626";
 
 const preparationTimeInMinutes = 60;
+const openingHour = 10;
+const weekdayClosingHour = 20;
+const sundayClosingHour = 18;
+
+
+// =========================
+// Enlarge Menu Photos
+// =========================
+
+document.querySelectorAll(".menu-card img").forEach(function (image) {
+
+    image.tabIndex = 0;
+    image.setAttribute("role", "button");
+    image.setAttribute("aria-label", "View larger: " + image.alt);
+
+    function openImagePreview() {
+        imageLightboxPhoto.src = image.src;
+        imageLightboxPhoto.alt = image.alt;
+        imageLightboxPhoto.classList.remove("is-zoomed");
+        imageZoomToggle.textContent = "Zoom in";
+        imageZoomToggle.setAttribute("aria-pressed", "false");
+        imageLightboxCaption.textContent = image.alt;
+        imageLightbox.showModal();
+    }
+
+    image.addEventListener("click", openImagePreview);
+
+    image.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openImagePreview();
+        }
+    });
+
+});
+
+imageLightboxClose.addEventListener("click", function () {
+    imageLightbox.close();
+});
+
+imageZoomToggle.addEventListener("click", function () {
+    const isZoomed = imageLightboxPhoto.classList.toggle("is-zoomed");
+    imageZoomToggle.textContent = isZoomed ? "Zoom out" : "Zoom in";
+    imageZoomToggle.setAttribute("aria-pressed", String(isZoomed));
+});
+
+imageLightbox.addEventListener("click", function (event) {
+    if (event.target === imageLightbox) {
+        imageLightbox.close();
+    }
+});
 
 
 // =========================
@@ -26,8 +82,53 @@ addButtons.forEach(function (button) {
 
     button.addEventListener("click", function () {
 
-        const name = button.dataset.name;
+        let name = button.dataset.name;
         const price = Number(button.dataset.price);
+
+        if (button.dataset.choice === "cold-drink") {
+
+            const drinkChoice = window.prompt("Coke or Stoney?");
+
+            if (drinkChoice === null) {
+                return;
+            }
+
+            const normalizedChoice = drinkChoice.trim().toLowerCase();
+
+            if (normalizedChoice !== "coke" && normalizedChoice !== "stoney") {
+                alert("Please choose Coke or Stoney.");
+                return;
+            }
+
+            name = normalizedChoice === "coke"
+                ? "1L Coke"
+                : "1L Stoney";
+
+        } else if (button.dataset.choice === "peanuts") {
+
+            const peanutChoice = window.prompt("Plain, Chilli, or with Raisins?");
+
+            if (peanutChoice === null) {
+                return;
+            }
+
+            const normalizedChoice = peanutChoice.trim().toLowerCase();
+            const peanutOptions = {
+                "plain": "Plain Peanuts",
+                "chilli": "Chilli Peanuts",
+                "chili": "Chilli Peanuts",
+                "with raisins": "Peanuts with Raisins",
+                "raisins": "Peanuts with Raisins"
+            };
+
+            if (!peanutOptions[normalizedChoice]) {
+                alert("Please choose Plain, Chilli, or with Raisins.");
+                return;
+            }
+
+            name = peanutOptions[normalizedChoice];
+
+        }
 
         // Pap has special rules
         if (name === "Pap") {
@@ -329,15 +430,6 @@ function hasPlate() {
 // =========================
 
 function isCollectionTimeValid() {
-
-    // If there is no Plate,
-    // there is no 1-hour preparation rule
-    if (!hasPlate()) {
-
-        return true;
-
-    }
-
     const selectedTime =
         collectionTime.value;
 
@@ -349,28 +441,71 @@ function isCollectionTimeValid() {
 
     const now = new Date();
 
-    const [hours, minutes] =
-        selectedTime.split(":");
+    const collectionDate = getCollectionDate();
+    const [hours, minutes] = selectedTime.split(":").map(Number);
+    const closingHour = getClosingHour(collectionDate);
 
-    const collectionDate =
-        new Date();
+    if (
+        hours < openingHour ||
+        hours > closingHour ||
+        (hours === closingHour && minutes > 0)
+    ) {
+        return false;
+    }
 
-    collectionDate.setHours(
-        Number(hours),
-        Number(minutes),
-        0,
-        0
+    if (!hasPlate()) {
+        return true;
+    }
+
+    const earliestCollectionTime = new Date(
+        now.getTime() + preparationTimeInMinutes * 60 * 1000
     );
-
-    const earliestCollectionTime =
-        new Date(
-            now.getTime() +
-            preparationTimeInMinutes * 60 * 1000
-        );
 
     return collectionDate >= earliestCollectionTime;
 
 }
+
+
+function getCollectionDate() {
+
+    const [hours, minutes] = collectionTime.value.split(":");
+    const collectionDate = new Date();
+
+    collectionDate.setHours(Number(hours), Number(minutes), 0, 0);
+
+    if (collectionDate <= new Date()) {
+        collectionDate.setDate(collectionDate.getDate() + 1);
+    }
+
+    return collectionDate;
+
+}
+
+
+function getClosingHour(date) {
+
+    return date.getDay() === 0
+        ? sundayClosingHour
+        : weekdayClosingHour;
+
+}
+
+
+function updateCollectionTimeLimit() {
+
+    if (collectionTime.value === "") {
+        collectionTime.max = "20:00";
+        return;
+    }
+
+    const collectionDate = getCollectionDate();
+    collectionTime.max = getClosingHour(collectionDate) + ":00";
+
+}
+
+
+collectionTime.addEventListener("input", updateCollectionTimeLimit);
+updateCollectionTimeLimit();
 
 
 // =========================
@@ -417,12 +552,17 @@ whatsappButton.addEventListener("click", function () {
 
     if (!isCollectionTimeValid()) {
 
-        alert(
-            "Your order contains a Plate. " +
-            "The whole order requires at least 1 hour " +
-            "preparation time. Please choose a later " +
-            "collection time."
-        );
+        const selectedTime = collectionTime.value;
+        const [selectedHours, selectedMinutes] = selectedTime.split(":").map(Number);
+        const closingHour = getClosingHour(getCollectionDate());
+        const outsideBusinessHours =
+            selectedHours < openingHour ||
+            selectedHours > closingHour ||
+            (selectedHours === closingHour && selectedMinutes > 0);
+
+        alert(outsideBusinessHours
+            ? "Collection is available from 10:00am to 8:00pm Monday to Saturday, and 10:00am to 6:00pm on Sunday. Please choose a time during store hours."
+            : "Orders containing a Plate need at least 1 hour of preparation. Please choose a later collection time.");
 
         collectionTime.focus();
 
@@ -464,11 +604,15 @@ whatsappButton.addEventListener("click", function () {
     // Collection Time
     // =========================
 
+    const collectionDate = getCollectionDate();
+    const isTomorrow = collectionDate.toDateString() !== new Date().toDateString();
+
     message +=
         "\nTotal: R" +
         total.toFixed(2) +
         "\n\nCollection time: " +
-        collectionTime.value;
+        collectionTime.value +
+        (isTomorrow ? " tomorrow" : " today");
 
 
     // =========================
@@ -480,6 +624,7 @@ whatsappButton.addEventListener("click", function () {
 
             return (
                 item.name === "1L Coke" ||
+                item.name === "1L Stoney" ||
                 item.name === "1L Stone"
             );
 
@@ -510,5 +655,10 @@ whatsappButton.addEventListener("click", function () {
         "https://wa.me/" +
         whatsappNumber +
         "?text=" +
-        encodeURIC
+        encodeURIComponent(message);
+
+    // Navigate directly so browsers do not block WhatsApp as a popup.
+    window.location.assign(whatsappURL);
+
+});
 

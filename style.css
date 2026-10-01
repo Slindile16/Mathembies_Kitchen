@@ -185,15 +185,27 @@ header {
     margin: 0 auto;
 }
 
+.food-menu-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .menu-card {
     background-color: #f7f7f7;
 
-    padding: 25px;
+    padding: 28px;
 
     border-radius: 8px;
     border: 1px solid #eeeeee;
 
     text-align: center;
+}
+
+.menu-card:not(:has(img)) {
+    aspect-ratio: 1 / 1;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .menu-card h4 {
@@ -239,10 +251,77 @@ header {
 
 .menu-card img {
     width: 100%;
-    height: 80px;
-    object-fit: cover;
+    height: 170px;
+    object-fit: contain;
+    background-color: #ffffff;
     border-radius: 6px;
     margin-bottom: 15px;
+    cursor: zoom-in;
+}
+
+.menu-card img:focus-visible {
+    outline: 3px solid #b38f00;
+    outline-offset: 3px;
+}
+
+.image-lightbox {
+    width: min(94vw, 1100px);
+    max-width: none;
+    max-height: 94vh;
+    margin: auto;
+    padding: 16px;
+    border: 0;
+    border-radius: 10px;
+    background: #111111;
+    color: #ffffff;
+    overflow: auto;
+}
+
+.image-lightbox::backdrop {
+    background: rgb(0 0 0 / 85%);
+}
+
+.image-lightbox-controls {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-bottom: 10px;
+    background: #111111;
+    z-index: 1;
+}
+
+.image-lightbox-controls button {
+    border: 0;
+    border-radius: 5px;
+    padding: 9px 13px;
+    background: #ffd400;
+    color: #111111;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#image-lightbox-photo {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: calc(94vh - 90px);
+    margin: 0 auto;
+    object-fit: contain;
+    cursor: zoom-in;
+}
+
+#image-lightbox-photo.is-zoomed {
+    max-width: none;
+    max-height: none;
+    cursor: zoom-out;
+}
+
+#image-lightbox-caption {
+    margin-top: 10px;
+    text-align: center;
 }
 
 
@@ -250,29 +329,6 @@ header {
    Food & Drink Images
 ========================= */
 
-.menu-card.chips-russian img {
-    content: url("images/Chips&Russian.jpeg");
-}
-
-.menu-card.coke img {
-    content: url("images/Coke.jpeg");
-}
-
-.menu-card.milky-pie img {
-    content: url("images/Ice-Cream.jpeg");
-}
-
-.menu-card.pepsi img {
-    content: url("images/pepsi.jpeg");
-}
-
-.menu-card.mirinda img {
-    content: url("images/mirinda.jpeg");
-}
-
-.menu-card.seven-up img {
-    content: url("images/7up.jpeg");
-}
 
 
 /* =========================
@@ -286,6 +342,12 @@ header {
 
 .order-section p {
     margin-bottom: 25px;
+}
+
+.collection-time-note {
+    display: block;
+    margin-top: 8px;
+    color: #666666;
 }
 
 
@@ -330,8 +392,18 @@ header {
     margin-bottom: 8px;
 }
 
-.contact-item span {
+.contact-item span,
+.contact-item .phone-link {
     color: #dddddd;
+}
+
+.phone-link {
+    text-decoration: none;
+}
+
+.phone-link:hover {
+    color: #ffd400;
+    text-decoration: underline;
 }
 
 
@@ -350,8 +422,14 @@ header {
 }
 
 .response-info {
-    color: #cccccc;
-    margin-top: 20px;
+    color: #ffd400;
+    font-weight: bold;
+}
+
+.hero p.response-info {
+    color: #ffd400;
+    font-weight: bold;
+    margin: 18px auto 0;
 }
 
 
@@ -394,6 +472,16 @@ footer p {
     margin: 5px;
 }
 
+footer a {
+    color: inherit;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #ffd400;
+    text-decoration: underline;
+}
+
 
 /* =========================
    Tablet
@@ -433,6 +521,14 @@ footer p {
         font-size: 16px;
     }
 
+    .food-menu-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .menu-card img {
+        height: 190px;
+    }
+
     .section h2 {
         font-size: 32px;
     }
@@ -443,6 +539,10 @@ footer p {
 @media (max-width: 500px) {
 
     .menu-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .food-menu-grid {
         grid-template-columns: 1fr;
     }
 

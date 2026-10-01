@@ -22,11 +22,15 @@ Orders are placed through WhatsApp.
 
 If there is no response within 5 minutes, customers can contact the business through a WhatsApp call or direct phone call.
 
-## Collection
+## Dine-in and pickup
 
-**Pickup only.**
+Customers can dine in or order for pickup. WhatsApp orders are prepared for collection.
 
-**Location:** To be added
+**Location:** 808 Ntsoanna Crescent, Old Etwatwa West, Benoni, 1519
+
+**Hours:** Monday–Saturday, 10:00am–8:00pm; Sunday, 10:00am–6:00pm
+
+Orders containing a Plate need at least one hour of preparation time. The selected collection time is treated as the next occurrence of that time, including tomorrow when the time has already passed today. Collection times must fall within business hours.
 
 ## Technologies
 
